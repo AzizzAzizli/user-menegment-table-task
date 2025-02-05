@@ -33,6 +33,7 @@ const Modal = ({ onClick }) => {
               xs: 0.65,
               sm: 0.5,
               md: 0.25,
+              maxWidth:"300px"
             },
           }}
           component={"div"}

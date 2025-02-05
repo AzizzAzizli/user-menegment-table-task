@@ -6,8 +6,37 @@ import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import { useDispatch, useSelector } from "react-redux";
+import { setActiveNewUserFormModal, setCloseNewUserFormModal } from "../../redux/modalSlice";
+import FormModal from "../formModal";
+import { addUser, clearUserData } from "../../redux/userSlice";
+import { currentTime } from "../../utils";
 function Navbar() {
+const dispatch = useDispatch()
+  const userData = useSelector((state) => state.users.userData);
+  const  newUserFormActive = useSelector((state)=>state.modal.newUserFormActive)
+  console.log(userData);
+  
+  function closeFormModal() {
+    dispatch(setCloseNewUserFormModal()) ;
+    dispatch(clearUserData());
+  }
+  function createUser() {
+    if (!userData.fullName || !userData.role || !userData.status) return alert('Please fill all the inputs!')
+    dispatch(addUser())
+    closeFormModal();
+    
+  }
+  currentTime()
+
   return (
+    <>
+      {/* Create new user */}
+
+      <FormModal formIsActive={newUserFormActive} onClose={closeFormModal} onClick={createUser}/>
+      
+      {/* Navbar */}
+      
     <AppBar position="static">
       <Toolbar
         style={{
@@ -82,7 +111,8 @@ function Navbar() {
           >
             <InsertDriveFileIcon sx={{ fontSize: "20px", mr: 1 }} /> Export
           </Button>
-          <Button
+            <Button
+               onClick={()=>dispatch(setActiveNewUserFormModal())}
             variant="contained"
             sx={{
               background: "white",
@@ -97,11 +127,12 @@ function Navbar() {
               },
             }}
           >
-            <AddCircleIcon sx={{ fontSize: "20px", mr: 1 }} /> User
+            <AddCircleIcon   sx={{ fontSize: "20px", mr: 1 }} /> User
           </Button>
         </Typography>
       </Toolbar>
     </AppBar>
+    </>
   );
 }
 

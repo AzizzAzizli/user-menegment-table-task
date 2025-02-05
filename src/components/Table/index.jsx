@@ -13,14 +13,15 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import SettingsIcon from "@mui/icons-material/Settings";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser, changeCurrentUsers, deleteUser } from "../../redux/userSlice";
+import { addUser, changeCurrentUsers, clearUserData, deleteUser, saveEdit, setActiveUserData } from "../../redux/userSlice";
 import { decrement, increment, setCurrentPage, setTotalPages } from "../../redux/paginationSlice";
 import Modal from "../modal";
-import { setActiveModal, setCloseModal } from "../../redux/modalSlice";
+import { setActiveForm, setActiveModal, setCloseFormModal, setCloseModal } from "../../redux/modalSlice";
+import FormModal from "../formModal";
 
 
 const TableComponent = () => {
-
+ const formIsActive = useSelector((state)=>state.modal.formIsActive)
   const users = useSelector((state) => state.users.users);
   const currentPage = useSelector((state) => state.pagination.currentPage);
   const totalPages = useSelector((state) => state.pagination.totalPages);
@@ -61,15 +62,34 @@ const TableComponent = () => {
 
   }
 
-// console.log(activeIndex);
-
-
+  function activateEditForm(id) {
+    dispatch(setActiveForm(id));
+    dispatch(setActiveUserData(id))
+  };
+  function saveChanges() {
+    dispatch(saveEdit(activeIndex));
+    dispatch(clearUserData())
+    dispatch(setCloseFormModal());
+  }
+  function closeEditFormModal() {
+    dispatch(setCloseFormModal());
+    dispatch(clearUserData());
+  };
 
   return (
     <>
-      <Modal onClick={deleteCurrentUser}/>
+      {/* Delete Modal */}
+
+      <Modal onClick={deleteCurrentUser} />
+
+      {/* Form Modal */}
+
+      <FormModal formIsActive={formIsActive} isEdit onClick={saveChanges} onClose={closeEditFormModal}/>
+
+      {/* Table */}
+
       <Typography component={"div"}>
-        <TableContainer sx={{ maxHeight: 450 }} component={Paper}>
+        <TableContainer sx={{ height: 400 }} component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -94,8 +114,8 @@ const TableComponent = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {currentUsers?.map((row) => (
-                <TableRow key={row.fullName}>
+              {currentUsers?.map((row,i) => (
+                <TableRow key={row.id+i+row.fullName+row.role+row.status}>
                   <TableCell align="left">{row.id}</TableCell>
 
                   <TableCell component="th" scope="row">
@@ -108,13 +128,15 @@ const TableComponent = () => {
                     {
                       <Box sx={{ display: "flex", gap: 1 }}>
                         <Typography component={"div"}>
-                        <SettingsIcon 
+                          <SettingsIcon 
+                            onClick={()=>activateEditForm(row.id)}
                           sx={{ color: "#1976D2", cursor: "pointer" }}
                         />
                         </Typography>
                        
                         <Typography  component={"div"}>
-                        <CancelIcon  onClick={()=>dispatch(setActiveModal(row.id))} sx={{ color: "red", cursor: "pointer" }} />
+                          <CancelIcon onClick={() => dispatch(setActiveModal(row.id))}
+                          sx={{ color: "red", cursor: "pointer" }} />
 
                         </Typography>
                       </Box>
@@ -125,19 +147,15 @@ const TableComponent = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        {/* <TablePagination
-          rowsPerPageOptions={[5]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={5}
-          page={1}
-          // onPageChange={handleChangePage}
-          // onRowsPerPageChange={handleChangeRowsPerPage}
-        /> */}
+
+        {/* Pagination  */}
+        
         <Typography
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            flexDirection:{sm:"row",xs:"column"},
+            justifyContent: { sm: "space-between", xs: "center" },
+            textAlign:{sm:"left",xs:"center"},
             padding: "6px 20px",
           }}
           component={"div"}
@@ -150,13 +168,13 @@ const TableComponent = () => {
               {`Showing ${currentPage==totalPages?users?.length:currentUsers.length*currentPage} of ${users?.length}`}
             </Typography>
           </Typography>
-
+        
           <Typography component={"div"}>
-            <Typography sx={{display:"flex"}} gap={0.5} component={"div"}>
+            <Typography sx={{display:"flex",justifyContent:{sm:"normal",xs:"center"}}} gap={0.5} component={"div"}>
               <Typography
                 onClick={()=>dispatch(decrement())}
                 display={currentPage !== 1 ? "block" : "none"}
-                sx={{ fontSize: "14px", color: "gray" ,cursor: "pointer" }}
+                sx={{ fontSize: "14px", color: "gray" ,cursor: "pointer", }}
                 component={"p"}
               >
                 Previous
