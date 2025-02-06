@@ -13,6 +13,7 @@ const Modal = ({ onClick }) => {
         sx={{
           background: "#80808059",
           position: "fixed",
+          zIndex:99,
           top: "0%",
           left: isActive == true ? "0%" : "100%",
           width: "100%",

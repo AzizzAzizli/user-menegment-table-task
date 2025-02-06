@@ -245,7 +245,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     addUser: (state, action) => {
-      // const newUser = { ...action.payload };
       state.userData.dateCreated = currentTime();
       state.userData.id = getRandomNumber();
       state.users.push(state.userData);
@@ -255,8 +254,6 @@ export const userSlice = createSlice({
     },
     deleteUser: (state, action) => {
       let index = state.users.findIndex((item) => item.id === action.payload);
-      console.log(index);
-
       state.users.splice(index, 1);
     },
     setUserData: (state, action) => {

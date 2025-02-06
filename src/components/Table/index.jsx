@@ -18,7 +18,7 @@ import { decrement, increment, setCurrentPage, setTotalPages } from "../../redux
 import Modal from "../modal";
 import { setActiveForm, setActiveModal, setCloseFormModal, setCloseModal } from "../../redux/modalSlice";
 import FormModal from "../formModal";
-
+import CircleIcon from '@mui/icons-material/Circle';
 
 const TableComponent = () => {
  const formIsActive = useSelector((state)=>state.modal.formIsActive)
@@ -93,10 +93,10 @@ const TableComponent = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell width={"10%"} align="left">
+                <TableCell sx={{position:"sticky" ,left:0, backgroundColor:"white"}} width={"10%"} align="left">
                   #
                 </TableCell>
-                <TableCell width={"25%"} align="left">
+                <TableCell sx={{position:"sticky" ,left:"8%",backgroundColor:"white"}} width={"25%"} align="left">
                   Full Name
                 </TableCell>
                 <TableCell width={"15%"} align="left">
@@ -116,14 +116,14 @@ const TableComponent = () => {
             <TableBody>
               {currentUsers?.map((row,i) => (
                 <TableRow key={row.id+i+row.fullName+row.role+row.status}>
-                  <TableCell align="left">{row.id}</TableCell>
+                  <TableCell sx={{position:"sticky" ,left:0,backgroundColor:"white"}} align="left">{row.id}</TableCell>
 
-                  <TableCell component="th" scope="row">
+                  <TableCell sx={{position:"sticky" ,left:"8%",backgroundColor:"white"}} component="th" scope="row">
                     {row.fullName}
                   </TableCell>
                   <TableCell align="left">{row.dateCreated}</TableCell>
                   <TableCell align="left">{row.role}</TableCell>
-                  <TableCell align="left">{row.status}</TableCell>
+                  <TableCell sx={{display:"flex",alignItems:"center",gap:"4px",}} align="left"><CircleIcon sx={{width:"10px",color:row.status==="Active"?"green":"red"}}/>{row.status}</TableCell>
                   <TableCell align="left">
                     {
                       <Box sx={{ display: "flex", gap: 1 }}>

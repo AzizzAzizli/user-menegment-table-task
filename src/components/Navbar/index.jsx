@@ -10,12 +10,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setActiveNewUserFormModal, setCloseNewUserFormModal } from "../../redux/modalSlice";
 import FormModal from "../formModal";
 import { addUser, clearUserData } from "../../redux/userSlice";
-import { currentTime } from "../../utils";
+import { currentTime, exportToExcel } from "../../utils";
 function Navbar() {
 const dispatch = useDispatch()
   const userData = useSelector((state) => state.users.userData);
   const  newUserFormActive = useSelector((state)=>state.modal.newUserFormActive)
-  console.log(userData);
+  const users = useSelector((state) => state.users.users);
   
   function closeFormModal() {
     dispatch(setCloseNewUserFormModal()) ;
@@ -94,7 +94,8 @@ const dispatch = useDispatch()
         </Box>
 
         <Typography style={{ display: "flex", gap: "8px" }} component={"div"}>
-          <Button
+            <Button
+              onClick={()=>exportToExcel(users)}
             variant="contained"
             sx={{
               background: "white",
@@ -109,7 +110,7 @@ const dispatch = useDispatch()
               },
             }}
           >
-            <InsertDriveFileIcon sx={{ fontSize: "20px", mr: 1 }} /> Export
+            <InsertDriveFileIcon  sx={{ fontSize: "20px", mr: 1 }} /> Export to Excel
           </Button>
             <Button
                onClick={()=>dispatch(setActiveNewUserFormModal())}
