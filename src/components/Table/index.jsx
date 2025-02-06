@@ -29,7 +29,6 @@ const TableComponent = () => {
   const activeIndex = useSelector((state) => state.modal.activeIndex);
   const userData = useSelector((state) => state.users.userData);
   const dispatch = useDispatch()
-console.log(userData);
 
 
   useEffect(() => {
@@ -126,7 +125,7 @@ console.log(userData);
                   </TableCell>
                   <TableCell align="left">{row.dateCreated}</TableCell>
                   <TableCell align="left">{row.role}</TableCell>
-                  <TableCell sx={{display:"flex",alignItems:"center",gap:"4px",}} align="left"><CircleIcon sx={{width:"10px",color:row.status==="Active"?"green":"red"}}/>{row.status}</TableCell>
+                  <TableCell  align="left"><Typography sx={{display:"flex",alignItems:"center",gap:"4px",}} component={"span"}><CircleIcon sx={{width:"10px",color:row.status==="Active"?"green":"red"}}/>{row.status}</Typography></TableCell>
                   <TableCell align="left">
                     {
                       <Box sx={{ display: "flex", gap: 1 }}>

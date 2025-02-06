@@ -73,11 +73,11 @@ const FormModal = ({isEdit, onClick,onClose,formIsActive}) => {
             variant="outlined"
           />
           <Autocomplete
-            value={userData?.status}
+            value={userData?.status||""}
             onChange={(event, newValue) => {
               dispatch(setUserData({ name: "status", value: newValue }));
             }}
-            inputValue={userData?.status}
+            inputValue={userData?.status||""}
             // onInputChange={(event, newInputValue) => {}}
             id="controllable-states-demo"
             options={["Active", "Inactive"]}
