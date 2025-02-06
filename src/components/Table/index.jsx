@@ -27,7 +27,9 @@ const TableComponent = () => {
   const totalPages = useSelector((state) => state.pagination.totalPages);
   const currentUsers = useSelector((state) => state.users.currentUsers);
   const activeIndex = useSelector((state) => state.modal.activeIndex);
+  const userData = useSelector((state) => state.users.userData);
   const dispatch = useDispatch()
+console.log(userData);
 
 
   useEffect(() => {
@@ -67,6 +69,7 @@ const TableComponent = () => {
     dispatch(setActiveUserData(id))
   };
   function saveChanges() {
+    if (!userData.fullName || !userData.status || !userData.role) return alert("Please fill the all fields!");
     dispatch(saveEdit(activeIndex));
     dispatch(clearUserData())
     dispatch(setCloseFormModal());
